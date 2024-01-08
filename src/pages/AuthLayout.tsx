@@ -1,5 +1,4 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import AuthForms from './authForms/AuthForms';
 
 const AuthLayout = () => {
   const isAuthenticated = false;

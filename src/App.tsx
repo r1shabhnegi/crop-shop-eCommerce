@@ -1,7 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { AuthLayout, Home, SignInForm, SignUpForm } from './pages';
-import AuthForms from './pages/authLayout/authForms/AuthForms';
+import {
+  AuthLayout,
+  Home,
+  SignInForm,
+  SignUpForm,
+  AuthFormsLayout,
+} from './pages';
 
 function App() {
   const data = () => {
@@ -15,7 +20,7 @@ function App() {
   return (
     <main className='w-full'>
       <Routes>
-        <Route element={<AuthForms />}>
+        <Route element={<AuthFormsLayout />}>
           <Route
             path='/sign-in'
             element={<SignInForm />}
