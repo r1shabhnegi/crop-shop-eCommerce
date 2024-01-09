@@ -21,9 +21,13 @@ import {
 // import { toast } from '@/components/ui/use-toast';
 import { useToast } from '@/components/ui/use-toast';
 import { checkAuthUser } from '@/services/redux/authSlice';
+import { useState } from 'react';
+import { Spinner } from '@nextui-org/react';
+import { useAppDispatch } from '@/utils/hooks/useGlobals';
 
 const SignInForm = () => {
-  const { fetchCheckAuthUser } = checkAuthUser();
+  const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { mutateAsync: createAccount } = useCreateAccount();
@@ -40,8 +44,8 @@ const SignInForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof signUpValidation>) {
-    console.log(values);
     try {
+      setIsLoading(true);
       const createAndDbSession = await createAccount(values);
 
       if (!createAndDbSession) {
@@ -65,7 +69,8 @@ const SignInForm = () => {
         return;
       }
 
-      const checkAuth = await fetchCheckAuthUser();
+      const checkAuth = await dispatch(checkAuthUser());
+
       if (checkAuth) {
         form.reset();
         navigate('/');
@@ -75,6 +80,8 @@ const SignInForm = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -160,7 +167,8 @@ const SignInForm = () => {
         <Button
           className='bg-gray-700 w-full'
           type='submit'>
-          Submit
+          {isLoading ? <Spinner /> : 'Submit'}
+          {/* Submit */}
         </Button>
         <p className='text-xs text-center'>
           Already a member?

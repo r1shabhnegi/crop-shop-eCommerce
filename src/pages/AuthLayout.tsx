@@ -1,7 +1,8 @@
+import { useAppSelector } from '@/utils/hooks/useGlobals';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const AuthLayout = () => {
-  const isAuthenticated = false;
+  const isAuthenticated = useAppSelector((state) => state.auth.auth);
 
   return (
     <>

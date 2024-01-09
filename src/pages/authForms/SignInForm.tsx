@@ -13,9 +13,20 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { signInValidation } from '@/utils/validation';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useToast } from '@/components/ui/use-toast';
+import { useSignInAccount } from '@/services/tanStack/queriesAndMutations';
+import { useAppDispatch } from '@/utils/hooks/useGlobals';
+import { Spinner } from '@nextui-org/react';
+import { checkAuthUser } from '@/services/redux/authSlice';
 
 const SignInForm = () => {
+  const dispatch = useAppDispatch();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { mutateAsync: signInAccount } = useSignInAccount();
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof signInValidation>>({
     resolver: zodResolver(signInValidation),
     defaultValues: {
@@ -24,8 +35,36 @@ const SignInForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signInValidation>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof signInValidation>) {
+    try {
+      setIsLoading(true);
+      const signInSession = await signInAccount({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (!signInSession) {
+        toast({
+          title: 'Something went wrong. Please login your new account',
+        });
+        navigate('/');
+        return;
+      }
+
+      const checkAuth = await dispatch(checkAuthUser());
+
+      if (checkAuth) {
+        form.reset();
+        navigate('/');
+        return;
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -74,7 +113,7 @@ const SignInForm = () => {
         <Button
           className='bg-gray-700 w-full'
           type='submit'>
-          Submit
+          {isLoading ? <Spinner /> : Submit}
         </Button>
         <p className='text-xs text-center'>
           Not registered yet?
