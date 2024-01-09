@@ -80,7 +80,7 @@ const SignInForm = () => {
               <FormLabel>email</FormLabel>
               <FormControl>
                 <Input
-                  className=' border-none'
+                  className=' border-none  text-black'
                   type='email'
                   placeholder='email'
                   {...field}
@@ -99,7 +99,7 @@ const SignInForm = () => {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
-                  className=' border-none'
+                  className=' border-none text-black'
                   placeholder='password'
                   type='password'
                   {...field}
@@ -113,7 +113,7 @@ const SignInForm = () => {
         <Button
           className='bg-gray-700 w-full'
           type='submit'>
-          {isLoading ? <Spinner /> : Submit}
+          {isLoading ? <Spinner /> : 'Submit'}
         </Button>
         <p className='text-xs text-center'>
           Not registered yet?

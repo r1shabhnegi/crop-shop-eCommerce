@@ -30,7 +30,6 @@ export const authSlice = createSlice({
         imageUrl,
       };
       state.auth = !!action.payload;
-      console.log(initialUser);
     },
     setLoading: (state, action) => {
       state.isLoading = action.payload;

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import {
   AuthLayout,
@@ -6,16 +6,31 @@ import {
   SignInForm,
   SignUpForm,
   AuthFormsLayout,
+  Products,
+  Contact,
+  About,
+  Catagories,
 } from './pages';
+import { useEffect } from 'react';
+import { checkAuthUser } from './services/redux/authSlice';
+import { useAppDispatch } from './utils/hooks/useGlobals';
 
 function App() {
-  const data = () => {
-    fetch('https://dummyjson.com/products')
-      .then((res) => res.json())
-      .then(console.log);
-  };
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  data();
+  useEffect(() => {
+    const cookieFallback = localStorage.getItem('cookieFallback');
+    // console.log(cookieFallback);
+    if (
+      cookieFallback === '[]' ||
+      cookieFallback === null ||
+      cookieFallback === undefined
+    ) {
+      navigate('/sign-in');
+    }
+    dispatch(checkAuthUser());
+  }, []);
 
   return (
     <main className='w-full'>
@@ -35,6 +50,22 @@ function App() {
           <Route
             index
             element={<Home />}
+          />
+          <Route
+            path='/products'
+            element={<Products />}
+          />
+          <Route
+            path='/contact'
+            element={<Contact />}
+          />
+          <Route
+            path='/about'
+            element={<About />}
+          />
+          <Route
+            path='/catagories'
+            element={<Catagories />}
           />
         </Route>
       </Routes>
