@@ -13,9 +13,20 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { signUpValidation } from '@/utils/validation';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  useCreateAccount,
+  useSignInAccount,
+} from '@/services/tanStack/queriesAndMutations';
+// import { toast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 
 const SignInForm = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { mutateAsync: createAccount } = useCreateAccount();
+  const { mutateAsync: signInAccount } = useSignInAccount();
+
   const form = useForm<z.infer<typeof signUpValidation>>({
     resolver: zodResolver(signUpValidation),
     defaultValues: {
@@ -26,7 +37,35 @@ const SignInForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signUpValidation>) {}
+  async function onSubmit(values: z.infer<typeof signUpValidation>) {
+    console.log(values);
+    try {
+      const createAndDbSession = await createAccount(values);
+
+      if (!createAndDbSession) {
+        toast({
+          title: 'please register again or try to sign in!',
+        });
+        return;
+      }
+
+      console.log(createAndDbSession);
+      const signInSession = await signInAccount({
+        email: createAndDbSession.email,
+        password: createAndDbSession.password,
+      });
+
+      if (!signInSession) {
+        toast({
+          title: 'Something went wrong. Please login your new account',
+        });
+        navigate('/');
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Form {...form}>
@@ -41,7 +80,7 @@ const SignInForm = () => {
               <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input
-                  className=' border-none'
+                  className=' border-none text-black'
                   placeholder='username'
                   {...field}
                 />
@@ -59,8 +98,7 @@ const SignInForm = () => {
               <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
-                  className=' border-none'
-                  type='email'
+                  className=' border-none text-black'
                   placeholder='name'
                   {...field}
                 />
@@ -78,7 +116,7 @@ const SignInForm = () => {
               <FormLabel>email</FormLabel>
               <FormControl>
                 <Input
-                  className=' border-none'
+                  className=' border-none text-black'
                   type='email'
                   placeholder='email'
                   {...field}
@@ -97,7 +135,7 @@ const SignInForm = () => {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
-                  className=' border-none'
+                  className=' border-none text-black'
                   placeholder='password'
                   type='password'
                   {...field}

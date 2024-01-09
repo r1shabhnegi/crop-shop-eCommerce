@@ -11,11 +11,11 @@ const AuthFormsLayout = () => {
     title = 'Sign Up';
   }
   return (
-    <div className='relative bg-red-200 w-full flex '>
+    <div className='relative bg-red-200 w-full h-screen flex '>
       <div className='w-1/2 h-screen'>
         <img
           src={authBg}
-          className='w-full h-full'
+          className='w-full h-screen'
           alt='Background Img'
         />
       </div>
