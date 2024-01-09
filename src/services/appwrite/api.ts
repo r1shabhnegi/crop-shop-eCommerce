@@ -1,4 +1,4 @@
-import { ID } from 'appwrite';
+import { ID, Query } from 'appwrite';
 import { account, appwriteConfigs, avatars, databases } from './config';
 import {
   createAccountTYP,
@@ -37,7 +37,7 @@ const saveUserToDb = async (user: saveUserToDbTYP) => {
   try {
     const promise = await databases.createDocument(
       appwriteConfigs.databasesId,
-      appwriteConfigs.userID,
+      appwriteConfigs.userId,
       ID.unique(),
       user
     );
@@ -55,6 +55,33 @@ export const signInAccount = async (userSignInData: signInAccountTYP) => {
       userSignInData.password
     );
     return promise;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCurrentAccount = async () => {
+  try {
+    const currentAccount = await getAccount();
+    if (!currentAccount) throw new Error();
+
+    const currentUser = await databases.listDocuments(
+      appwriteConfigs.databasesId,
+      appwriteConfigs.userId,
+      [Query.equal('accountId', currentAccount.$id)]
+    );
+    if (!currentUser) throw new Error();
+
+    return currentUser.documents[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAccount = async () => {
+  try {
+    const getAccount = await account.get();
+    return getAccount;
   } catch (error) {
     console.log(error);
   }

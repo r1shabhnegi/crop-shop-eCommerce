@@ -20,8 +20,10 @@ import {
 } from '@/services/tanStack/queriesAndMutations';
 // import { toast } from '@/components/ui/use-toast';
 import { useToast } from '@/components/ui/use-toast';
+import { checkAuthUser } from '@/services/redux/authSlice';
 
 const SignInForm = () => {
+  const { fetchCheckAuthUser } = checkAuthUser();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { mutateAsync: createAccount } = useCreateAccount();
@@ -51,8 +53,8 @@ const SignInForm = () => {
 
       console.log(createAndDbSession);
       const signInSession = await signInAccount({
-        email: createAndDbSession.email,
-        password: createAndDbSession.password,
+        email: values.email,
+        password: values.password,
       });
 
       if (!signInSession) {
@@ -61,6 +63,15 @@ const SignInForm = () => {
         });
         navigate('/');
         return;
+      }
+
+      const checkAuth = await fetchCheckAuthUser();
+      if (checkAuth) {
+        form.reset();
+        navigate('/');
+        return;
+      } else {
+        throw new Error();
       }
     } catch (error) {
       console.log(error);
