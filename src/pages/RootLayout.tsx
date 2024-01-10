@@ -4,13 +4,12 @@ import { Outlet } from 'react-router-dom';
 
 const RootLayout = () => {
   return (
-    <div>
+    <div className='relative'>
       <Header />
       <div className='pt-14'>
-        {' '}
-        <Outlet />{' '}
+        <Outlet />
       </div>
-      <div className='h-[100rem] bg-gray-200'></div>
+      <div className='h-[100rem] bg-white'></div>
       <Footer />
     </div>
   );
