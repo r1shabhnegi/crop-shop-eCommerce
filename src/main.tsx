@@ -7,8 +7,10 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { NextUIProvider } from '@nextui-org/react';
 import './index.css';
+import { fetchAuth } from './services/redux/authSlice.ts';
 
 const queryClient = new QueryClient();
+store.dispatch(fetchAuth());
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>

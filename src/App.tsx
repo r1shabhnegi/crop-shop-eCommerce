@@ -12,24 +12,24 @@ import {
   Catagories,
 } from './pages';
 import { useEffect } from 'react';
-import { checkAuthUser } from './services/redux/authSlice';
 import { useAppDispatch } from './services/redux/store';
+import { fetchAuth } from './services/redux/authSlice';
 function App() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const cookieFallback = localStorage.getItem('cookieFallback');
-    if (
-      cookieFallback === '[]' ||
-      cookieFallback === null ||
-      cookieFallback === undefined
-    ) {
-      navigate('/sign-in');
-    }
+  // useEffect(() => {
+  //   const cookieFallback = localStorage.getItem('cookieFallback');
+  //   if (
+  //     cookieFallback === '[]' ||
+  //     cookieFallback === null ||
+  //     cookieFallback === undefined
+  //   ) {
+  //     navigate('/sign-in');
+  //   }
 
-    dispatch(checkAuthUser());
-  }, []);
+  //   dispatch(fetchAuth());
+  // }, []);
 
   return (
     <main className='w-full'>

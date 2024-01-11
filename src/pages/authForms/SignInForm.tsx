@@ -19,7 +19,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useSignInAccount } from '@/services/tanStack/queriesAndMutations';
 import { useAppDispatch } from '@/services/redux/store';
 import { Spinner } from '@nextui-org/react';
-import { checkAuthUser } from '@/services/redux/authSlice';
+import { fetchAuth } from '@/services/redux/authSlice';
 
 const SignInForm = () => {
   const dispatch = useAppDispatch();
@@ -51,7 +51,7 @@ const SignInForm = () => {
         return;
       }
 
-      const checkAuth = await dispatch(checkAuthUser());
+      const checkAuth = await dispatch(fetchAuth());
       console.log(checkAuth);
 
       if (checkAuth) {

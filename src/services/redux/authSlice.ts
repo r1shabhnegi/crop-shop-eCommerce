@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { authInitialStateTYP, initialUserTYP } from '@/utils/types';
 import { getCurrentAccount } from '../appwrite/api';
 
-const initialUser: initialUserTYP = {
+const initialUser = {
   id: '',
   name: '',
   username: '',
@@ -12,47 +12,46 @@ const initialUser: initialUserTYP = {
 
 const initialState: authInitialStateTYP = {
   isAuthenticated: false,
+  status: 'rejected',
   initialUser,
 };
+
+export const fetchAuth = createAsyncThunk('auth/fetchAuth', async () => {
+  try {
+    const data = await getCurrentAccount();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    setCredentials: (state, action) => {
-      const { $id, name, username, email, imageUrl } = action.payload;
-
-      state.initialUser = {
-        id: $id,
-        name,
-        username,
-        email,
-        imageUrl,
-      };
-
-      state.isAuthenticated = !!action.payload;
-    },
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addCase(fetchAuth.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(
+        fetchAuth.fulfilled,
+        (state, { payload }: PayloadAction<initialUserTYP>) => {
+          state.status = 'success';
+          const { $id, name, username, email, imageUrl } = payload;
+          state.isAuthenticated = !!payload;
+          console.log($id);
+          state.initialUser = { id: $id, name, username, email, imageUrl };
+        }
+      )
+      .addCase(fetchAuth.rejected, (state) => {
+        state.status = 'rejected';
+      });
   },
 });
 
-export const { setCredentials } = authSlice.actions;
 export default authSlice.reducer;
 
-export const checkAuthUser = () => {
-  return async function fetchCheckAuthUser(dispatch) {
-    try {
-      const data = await getCurrentAccount();
-
-      if (data) {
-        dispatch(setCredentials(data));
-      }
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  };
-};
-
-// export const selectUserData = (state) => state.auth.isAuthenticated;
-// export const selectUserData = (state) => state.auth.isAuthenticated;
+export const isAuthenticated = (state) => state.auth.isAuthenticated;
+export const userData = (state) => state.auth.initialUser;
+export const authStatus = (state) => state.auth.status;

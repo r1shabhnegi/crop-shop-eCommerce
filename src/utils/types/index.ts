@@ -27,12 +27,13 @@ export type signInAccountTYP = {
 };
 
 export type authInitialStateTYP = {
+  status: 'pending' | 'success' | 'rejected';
   initialUser: object;
   isAuthenticated: boolean;
 };
 
 export type initialUserTYP = {
-  id: string;
+  $id: string;
   name: string;
   username: string;
   email: string;

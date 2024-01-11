@@ -20,7 +20,7 @@ import {
 } from '@/services/tanStack/queriesAndMutations';
 // import { toast } from '@/components/ui/use-toast';
 import { useToast } from '@/components/ui/use-toast';
-import { checkAuthUser } from '@/services/redux/authSlice';
+import { fetchAuth } from '@/services/redux/authSlice';
 import { useState } from 'react';
 import { Spinner } from '@nextui-org/react';
 import { useAppDispatch } from '@/services/redux/store';
@@ -69,7 +69,7 @@ const SignInForm = () => {
         return;
       }
 
-      const checkAuth = await dispatch(checkAuthUser());
+      const checkAuth = await dispatch(fetchAuth());
 
       if (checkAuth) {
         form.reset();
