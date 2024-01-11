@@ -1,5 +1,5 @@
 import { headerNavList } from '@/utils/constants';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import cart from '../../assets/cart.svg';
 import profile from '../../assets/profile.svg';
@@ -13,14 +13,40 @@ import cancel from '../../assets/cancel.svg';
 import cancelLight from '../../assets/cancel-light.svg';
 import { useEffect, useState } from 'react';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+// import { useSignOutAccount } from '@/services/tanStack/queriesAndMutations';
+// import { useAppDispatch } from '@/utils/hooks/useGlobals';
+// import { setAuth, setInitialUser } from '@/services/redux/authSlice';
+
 const Header = () => {
+  // const { mutate: signOutAccount, isSuccess } = useSignOutAccount();
+  // const navigate = useNavigate();
+  // const dispatch = useAppDispatch();
+
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     navigate('/sign-in');
+  //     dispatch(
+  //       setInitialUser({
+  //         id: '',
+  //         name: '',
+  //         username: '',
+  //         email: '',
+  //         imageUrl: '',
+  //       })
+  //     );
+  //     dispatch(setAuth(false));
+  //   }
+  // }, [isSuccess]);
+
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  const show = 'bg-gray-700 transition-all duration-500';
+  const show = 'bg-gray-600 transition-all duration-500';
   const top = 'translate-y-0 transition-all duration-500 bg-white';
   const hide = '-translate-y-16 transition-all duration-500';
 
@@ -47,6 +73,11 @@ const Header = () => {
     }
     setLastScrollY(currentScrollY);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setShowSearch(false);
+  }, [pathname]);
 
   useEffect(() => {
     window.addEventListener('scroll', controlNavbar);
@@ -78,13 +109,11 @@ const Header = () => {
                 <Link
                   to={item.route}
                   className={`text-sm  ${
-                    isActive
-                      ? 'text-green-500 font-bold'
-                      : 'text-gray-900 font-medium'
+                    isActive && 'text-green-500 font-bold'
                   } ${
                     showStatusColor && !isActive
                       ? 'text-gray-100 font-medium'
-                      : ''
+                      : 'text-gray-900 font-medium'
                   }`}>
                   {item.label}
                 </Link>
@@ -103,7 +132,7 @@ const Header = () => {
           </Link>
         </div>
 
-        <ul className=' w-[25rem] h-auto flex items-center justify-end gap-5 '>
+        <ul className=' w-[25rem] h-auto flex items-center justify-end gap-5'>
           <li>
             <button
               type='button'
@@ -115,12 +144,28 @@ const Header = () => {
             </button>
           </li>
           <li>
-            <button>
-              <img
-                src={showStatusColor ? profileLight : profile}
-                alt='profile'
-              />
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <img
+                  src={showStatusColor ? profileLight : profile}
+                  alt='profile'
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link
+                    to={'/profile/:id'}
+                    className='text-bold'>
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  {/* <button onClick={signOutAccount()}></button> */}
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {/* </button> */}
           </li>
           <li>
             <button>
@@ -140,7 +185,9 @@ const Header = () => {
           </li>
         </ul>
         <div
-          className={`bg-gray-200 w-full ${
+          className={`${
+            showStatusColor ? 'bg-gray-500' : 'bg-gray-300'
+          } w-full ${
             showSearch ? 'top-16' : '-top-20'
           } left-0 h-20 absolute flex items-center justify-center transition-all -z-10`}>
           <form
@@ -149,25 +196,29 @@ const Header = () => {
             <input
               type='text'
               value={searchInputValue}
-              className='outline-none h-10 w-72 p-2 rounded-tl-lg rounded-bl-lg'
+              className={`${
+                showStatusColor && 'bg-gray-200'
+              } outline-none h-10 w-[40rem] p-2 rounded-tl-lg rounded-bl-lg`}
               onChange={(e) => setSearchInputValue(e.target.value)}
             />
             <button
               type='submit'
               className='w-10 h-10'>
               <img
-                className='h-full w-full p-2 bg-gray-300 '
+                className={`h-full w-full p-2 ${
+                  showStatusColor ? 'bg-gray-600' : 'bg-gray-400'
+                }   rounded-tr-lg rounded-br-lg`}
                 src={showStatusColor ? searchLight : search}
                 alt='submit'
               />
             </button>
             <button
               type='button'
-              className='h-10 w-10'
+              className='h-10 w-10 relative left-96'
               onClick={handleSearchClose}>
               <img
-                src={cancel}
-                className='h-full w-full p-1 bg-gray-400 rounded-tr-lg rounded-br-lg'
+                src={showStatusColor ? cancelLight : cancel}
+                className='h-full w-full p-1 bg-gray-400 rounded-lg'
                 alt='cancel'
               />
             </button>

@@ -17,7 +17,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { useSignInAccount } from '@/services/tanStack/queriesAndMutations';
-import { useAppDispatch } from '@/utils/hooks/useGlobals';
+import { useAppDispatch } from '@/services/redux/store';
 import { Spinner } from '@nextui-org/react';
 import { checkAuthUser } from '@/services/redux/authSlice';
 
@@ -52,6 +52,7 @@ const SignInForm = () => {
       }
 
       const checkAuth = await dispatch(checkAuthUser());
+      console.log(checkAuth);
 
       if (checkAuth) {
         form.reset();

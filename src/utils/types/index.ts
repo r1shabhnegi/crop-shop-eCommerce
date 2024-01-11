@@ -27,9 +27,8 @@ export type signInAccountTYP = {
 };
 
 export type authInitialStateTYP = {
-  initialUser: {};
-  auth: boolean;
-  isLoading: boolean;
+  initialUser: object;
+  isAuthenticated: boolean;
 };
 
 export type initialUserTYP = {

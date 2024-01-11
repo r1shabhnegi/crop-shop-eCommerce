@@ -86,3 +86,12 @@ export const getAccount = async () => {
     console.log(error);
   }
 };
+
+// export const signOutAccount = async () => {
+//   try {
+//     const session = await account.deleteSessions();
+//     return session;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

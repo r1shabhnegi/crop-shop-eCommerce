@@ -1,7 +1,7 @@
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import {
-  AuthLayout,
+  ProtectedRoute,
   Home,
   SignInForm,
   SignUpForm,
@@ -13,15 +13,13 @@ import {
 } from './pages';
 import { useEffect } from 'react';
 import { checkAuthUser } from './services/redux/authSlice';
-import { useAppDispatch } from './utils/hooks/useGlobals';
-
+import { useAppDispatch } from './services/redux/store';
 function App() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const cookieFallback = localStorage.getItem('cookieFallback');
-    // console.log(cookieFallback);
     if (
       cookieFallback === '[]' ||
       cookieFallback === null ||
@@ -29,6 +27,7 @@ function App() {
     ) {
       navigate('/sign-in');
     }
+
     dispatch(checkAuthUser());
   }, []);
 
@@ -46,7 +45,7 @@ function App() {
           />
         </Route>
 
-        <Route element={<AuthLayout />}>
+        <Route element={<ProtectedRoute />}>
           <Route
             index
             element={<Home />}

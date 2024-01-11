@@ -23,7 +23,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { checkAuthUser } from '@/services/redux/authSlice';
 import { useState } from 'react';
 import { Spinner } from '@nextui-org/react';
-import { useAppDispatch } from '@/utils/hooks/useGlobals';
+import { useAppDispatch } from '@/services/redux/store';
 
 const SignInForm = () => {
   const dispatch = useAppDispatch();
