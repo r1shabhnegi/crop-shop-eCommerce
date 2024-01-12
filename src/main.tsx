@@ -10,7 +10,6 @@ import './index.css';
 import { fetchAuth } from './services/redux/authSlice.ts';
 
 const queryClient = new QueryClient();
-store.dispatch(fetchAuth());
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>

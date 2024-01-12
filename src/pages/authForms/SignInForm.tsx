@@ -52,7 +52,6 @@ const SignInForm = () => {
       }
 
       const checkAuth = await dispatch(fetchAuth());
-      console.log(checkAuth);
 
       if (checkAuth) {
         form.reset();

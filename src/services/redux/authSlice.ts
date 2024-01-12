@@ -28,7 +28,17 @@ export const fetchAuth = createAsyncThunk('auth/fetchAuth', async () => {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setAuthentication: (state, action) => {
+      state.isAuthenticated = action.payload;
+    },
+    setInitialUser: (state, action) => {
+      state.initialUser = action.payload;
+    },
+    setStatus: (state, action) => {
+      state.status = action.payload;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchAuth.pending, (state) => {
@@ -38,10 +48,11 @@ export const authSlice = createSlice({
         fetchAuth.fulfilled,
         (state, { payload }: PayloadAction<initialUserTYP>) => {
           state.status = 'success';
-          const { $id, name, username, email, imageUrl } = payload;
+          if (payload) {
+            const { $id, name, username, email, imageUrl } = payload;
+            state.initialUser = { $id, name, username, email, imageUrl };
+          }
           state.isAuthenticated = !!payload;
-          console.log($id);
-          state.initialUser = { id: $id, name, username, email, imageUrl };
         }
       )
       .addCase(fetchAuth.rejected, (state) => {
@@ -49,9 +60,10 @@ export const authSlice = createSlice({
       });
   },
 });
-
+export const { setAuthentication, setInitialUser, setStatus } =
+  authSlice.actions;
 export default authSlice.reducer;
 
-export const isAuthenticated = (state) => state.auth.isAuthenticated;
-export const userData = (state) => state.auth.initialUser;
-export const authStatus = (state) => state.auth.status;
+export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const selectUserData = (state) => state.auth.initialUser;
+export const selectAuthStatus = (state) => state.auth.status;

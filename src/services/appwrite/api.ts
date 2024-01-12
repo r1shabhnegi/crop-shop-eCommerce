@@ -61,37 +61,29 @@ export const signInAccount = async (userSignInData: signInAccountTYP) => {
 };
 
 export const getCurrentAccount = async () => {
-  try {
-    const currentAccount = await getAccount();
-    if (!currentAccount) throw new Error();
+  const currentAccount = await getAccount();
+  if (!currentAccount) throw new Error();
 
-    const currentUser = await databases.listDocuments(
-      appwriteConfigs.databasesId,
-      appwriteConfigs.userId,
-      [Query.equal('accountId', currentAccount.$id)]
-    );
-    if (!currentUser) throw new Error();
+  const currentUser = await databases.listDocuments(
+    appwriteConfigs.databasesId,
+    appwriteConfigs.userId,
+    [Query.equal('accountId', currentAccount.$id)]
+  );
+  if (!currentUser) throw new Error();
 
-    return currentUser.documents[0];
-  } catch (error) {
-    console.log(error);
-  }
+  return currentUser.documents[0];
 };
 
 export const getAccount = async () => {
+  const getAccount = await account.get();
+  return getAccount;
+};
+
+export const signOutAccount = async () => {
   try {
-    const getAccount = await account.get();
-    return getAccount;
+    const session = await account.deleteSessions();
+    return session;
   } catch (error) {
     console.log(error);
   }
 };
-
-// export const signOutAccount = async () => {
-//   try {
-//     const session = await account.deleteSessions();
-//     return session;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };

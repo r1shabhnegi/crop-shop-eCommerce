@@ -9,3 +9,4 @@ export { default as Products } from './Products';
 export { default as Contact } from './Contact';
 export { default as About } from './About';
 export { default as Catagories } from './Catagories';
+export { default as Profile } from './Profile';

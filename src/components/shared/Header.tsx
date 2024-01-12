@@ -11,6 +11,8 @@ import saveLight from '../../assets/save-light.svg';
 import searchLight from '../../assets/search-light.svg';
 import cancel from '../../assets/cancel.svg';
 import cancelLight from '../../assets/cancel-light.svg';
+import logout from '../../assets/logout.svg';
+import profileSolid from '../../assets/profile-solid.svg';
 import { useEffect, useState } from 'react';
 
 import {
@@ -19,30 +21,36 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-// import { useSignOutAccount } from '@/services/tanStack/queriesAndMutations';
-// import { useAppDispatch } from '@/utils/hooks/useGlobals';
-// import { setAuth, setInitialUser } from '@/services/redux/authSlice';
+import { useSignOutAccount } from '@/services/tanStack/queriesAndMutations';
+import { useAppDispatch, useAppSelector } from '@/services/redux/store';
+import {
+  selectUserData,
+  setAuthentication,
+  setInitialUser,
+} from '@/services/redux/authSlice';
 
 const Header = () => {
-  // const { mutate: signOutAccount, isSuccess } = useSignOutAccount();
-  // const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
+  const { mutate: signOutAccount, isSuccess } = useSignOutAccount();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { id } = useAppSelector(selectUserData);
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     navigate('/sign-in');
-  //     dispatch(
-  //       setInitialUser({
-  //         id: '',
-  //         name: '',
-  //         username: '',
-  //         email: '',
-  //         imageUrl: '',
-  //       })
-  //     );
-  //     dispatch(setAuth(false));
-  //   }
-  // }, [isSuccess]);
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/sign-in');
+      dispatch(
+        setInitialUser({
+          id: '',
+          name: '',
+          username: '',
+          email: '',
+          imageUrl: '',
+        })
+      );
+
+      dispatch(setAuthentication(false));
+    }
+  }, [isSuccess]);
 
   const { pathname } = useLocation();
 
@@ -152,20 +160,33 @@ const Header = () => {
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
+                <DropdownMenuItem className='p-3'>
                   <Link
-                    to={'/profile/:id'}
-                    className='text-bold'>
-                    Profile
+                    to={`/profile/${id}`}
+                    className='text-bold flex'>
+                    <img
+                      src={profileSolid}
+                      className='pr-2 w-5'
+                      alt=''
+                    />
+                    <p className='pl-1 font-medium'>Profile</p>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  {/* <button onClick={signOutAccount()}></button> */}
-                  Logout
+                <DropdownMenuItem className='p-3'>
+                  <button
+                    onClick={() => signOutAccount()}
+                    className='flex items-center justify-center'>
+                    <img
+                      src={logout}
+                      className='pr-2  w-6'
+                      alt=''
+                    />
+                    <p className=' font-medium'>Logout</p>
+                    {/* Logout */}
+                  </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            {/* </button> */}
           </li>
           <li>
             <button>

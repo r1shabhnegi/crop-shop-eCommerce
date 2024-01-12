@@ -10,6 +10,7 @@ import {
   Contact,
   About,
   Catagories,
+  Profile,
 } from './pages';
 import { useEffect } from 'react';
 import { useAppDispatch } from './services/redux/store';
@@ -18,18 +19,18 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   const cookieFallback = localStorage.getItem('cookieFallback');
-  //   if (
-  //     cookieFallback === '[]' ||
-  //     cookieFallback === null ||
-  //     cookieFallback === undefined
-  //   ) {
-  //     navigate('/sign-in');
-  //   }
+  useEffect(() => {
+    const cookieFallback = localStorage.getItem('cookieFallback');
+    if (
+      cookieFallback === '[]' ||
+      cookieFallback === null ||
+      cookieFallback === undefined
+    ) {
+      navigate('/sign-in');
+    }
 
-  //   dispatch(fetchAuth());
-  // }, []);
+    dispatch(fetchAuth());
+  }, []);
 
   return (
     <main className='w-full'>
@@ -65,6 +66,10 @@ function App() {
           <Route
             path='/catagories'
             element={<Catagories />}
+          />
+          <Route
+            path='/profile/:id'
+            element={<Profile />}
           />
         </Route>
       </Routes>

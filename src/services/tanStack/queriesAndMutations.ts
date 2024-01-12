@@ -16,8 +16,8 @@ export const useSignInAccount = () => {
   });
 };
 
-// export const useSignOutAccount = () => {
-//   return useMutation({
-//     mutationFn: signOutAccount,
-//   });
-// };
+export const useSignOutAccount = () => {
+  return useMutation({
+    mutationFn: signOutAccount,
+  });
+};
