@@ -50,7 +50,7 @@ export const authSlice = createSlice({
           state.status = 'success';
           if (payload) {
             const { $id, name, username, email, imageUrl } = payload;
-            state.initialUser = { $id, name, username, email, imageUrl };
+            state.initialUser = { id: $id, name, username, email, imageUrl };
           }
           state.isAuthenticated = !!payload;
         }

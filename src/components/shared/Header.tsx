@@ -34,6 +34,9 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { id } = useAppSelector(selectUserData);
+  // console.log(id);
+  // const data = useAppSelector((state) => state.auth.initialUser);
+  // console.log(data);
 
   useEffect(() => {
     if (isSuccess) {
