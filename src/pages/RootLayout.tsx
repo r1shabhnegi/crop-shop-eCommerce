@@ -9,7 +9,6 @@ const RootLayout = () => {
       <div className='pt-16'>
         <Outlet />
       </div>
-      <div className='h-[100rem] bg-white'></div>
       <Footer />
     </div>
   );

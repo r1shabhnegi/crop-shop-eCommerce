@@ -1,7 +1,9 @@
+import Banner from '@/components/shared/Banner';
+
 const Home = () => {
   return (
     <div className='bg-gray-100 h-96'>
-      <div></div>
+      <Banner />
     </div>
   );
 };

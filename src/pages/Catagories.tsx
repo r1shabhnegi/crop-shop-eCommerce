@@ -16,8 +16,8 @@ const Catagories = () => {
 
   return (
     <div className=' w-full h-96 p-32'>
-      <h1 className='font text-6xl pb-14'>Catagories</h1>
-      <ul className=' flex flex-wrap gap-10'>
+      <h1 className='font text-6xl pl-16 pb-14'>Catagories</h1>
+      <ul className=' flex flex-wrap items-center justify-center gap-10'>
         {data?.map((item) => (
           <li key={item}>
             <CatagoriesCard item={item} />
